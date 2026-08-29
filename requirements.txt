@@ -1,0 +1,12 @@
+# Personal Cognitive OS — Phase 0 依赖
+# 运行环境：Python 3.12（Windows）
+# 注意：LLM 运行时使用 llama.cpp 官方二进制（llama-b8981-bin-win-cpu-x64/llama-server.exe），
+#       不通过 pip 安装 llama-cpp-python。
+# 网络受限环境：pip 可能因沙箱 TLS 失败，需在可联网环境安装。
+
+fastapi>=0.115
+uvicorn>=0.30
+sqlalchemy>=2.0
+pyyaml>=6.0
+psutil>=5.9
+ 
