@@ -1,4 +1,4 @@
-# MindTrace · Personal Cognitive OS（可直接运行I:\MindTrace\MindTrace.exe\MindTrace.exe）
+# MindTrace · Personal Cognitive OS（可直接运行实际可直接运行MindTrace.exe\MindTrace.exe，因为配置文件_intelnal偏大不便上传，故无法运行exe文件）
 
 个人认知操作系统 / AI 第二大脑 —— 完全本地运行、长期理解用户的个人记忆系统。
 
@@ -8,22 +8,22 @@
 
 ```bash
 # 1. 环境
-#    已内置项目 venv：.venv（Python 3.12；含 fastapi/uvicorn/sqlalchemy/pyyaml/psutil）
+#    已内置项目 venv：.venv（Python 3.12；含 fastapi/uvicorn/sqlalchemy/pyyaml/psutil）（过大无法上传，需手动安装库，在MindTrace/requirements.txt）
 #    网络受限/沙箱环境：pip 不可用时用 scripts/install_wheels.py 装 wheel（见下）
 
 # 2. 下载模型（默认下载当前硬件档位所需的 chat 模型）
-.venv\Scripts\python.exe scripts/download_models.py
+python scripts/download_models.py
 # 可用: --model all（chat + embedding）| --model embedding | --source hf-mirror
 
 # 3.（可选）语音问答：安装 Vosk 转写模型（语音输入）+ Piper1（语音合成）
-.venv\Scripts\python.exe scripts/setup_voice.py
+python.exe scripts/setup_voice.py
 # 产物：models/vosk-model-small-cn-0.22/（Vosk 中文 ASR，~44MB）
 # 语音合成：piper1-gpl Python 包（.venv 内，含 espeak-ng-data + g2pw）
 #            + models/zh_CN-huayan-medium.onnx（中文女声，自行提供）
 # 缺模型时语音功能自动降级（按钮无效化），TTS 失败自动回退 Windows SAPI
 
 # 4. 启动
-.venv\Scripts\python.exe main.py
+python main.py
 # 浏览器打开 http://127.0.0.1:4000
 ```
 
