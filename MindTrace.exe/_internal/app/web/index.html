@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindTrace · Personal Cognitive OS</title>
+  <link rel="stylesheet" href="/static/style.css?v=20260829">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo">◉</span>
+      <span>MindTrace</span>
+      <span class="sub">Personal Cognitive OS</span>
+    </div>
+    <div id="status" class="status">连接中…</div>
+    <div class="header-right">
+      <div class="notif-wrap">
+        <button id="notifBtn" class="notif-btn" title="通知">🔔<span id="notifBadge" class="notif-badge hidden"></span></button>
+        <div id="notifPanel" class="notif-panel hidden"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <nav class="view-nav">
+        <button data-view="chat" class="active">💬 对话</button>
+        <button data-view="tasks">🎯 当前任务</button>
+        <button data-view="experiences">📚 经验库</button>
+        <button data-view="timeline">🕐 时间线</button>
+        <button data-view="graph">🕸 图谱</button>
+        <button data-view="maintenance">🛠 维护</button>
+        <button data-view="settings">⚙️ 设置</button>
+      </nav>
+      <div class="chat-panel">
+        <button id="newChat" class="new-chat">＋ 新建对话</button>
+        <ul id="sessionList" class="session-list"></ul>
+      </div>
+    </aside>
+
+    <main>
+      <section id="view-chat" class="view active">
+        <div id="messages" class="messages">
+          <div class="welcome">
+            <div class="welcome-title">你的第二大脑</div>
+            <div class="welcome-sub">Phase 1 · 本地记忆已启用 · 用「记住：xxx」主动记录</div>
+          </div>
+        </div>
+        <div class="composer">
+          <textarea id="input" rows="1" placeholder="和你的第二大脑对话…（Enter 发送，Shift+Enter 换行）"></textarea>
+          <button id="send">发送</button>
+        </div>
+      </section>
+
+      <section id="view-tasks" class="view">
+        <div class="view-head"><h2>当前任务</h2><span class="view-hint">自动跟踪你的工作过程</span></div>
+        <div id="tasksContent" class="view-body"></div>
+      </section>
+
+      <section id="view-experiences" class="view">
+        <div class="view-head"><h2>个人经验库</h2><span class="view-hint">已沉淀的经验（确认 = 证据分级 A）</span></div>
+        <div id="experiencesContent" class="view-body"></div>
+      </section>
+
+      <section id="view-timeline" class="view">
+        <div class="view-head"><h2>记忆时间线</h2><span class="view-hint">重要经历（事件 · 经验）</span></div>
+        <div id="timelineContent" class="view-body"></div>
+      </section>
+
+      <section id="view-graph" class="view">
+        <div class="view-head">
+          <h2>个人经历图谱</h2>
+          <span class="view-hint">点击节点展开邻域 · 类型按颜色区分</span>
+          <button id="graphExportImg" class="graph-edit-btn" title="导出为高清 PNG 图片">📷 导出图片</button>
+          <button id="graphExportHtml" class="graph-edit-btn" title="导出为可交互 HTML 网页（缩放/拖拽/点击）">🌐 导出网页</button>
+          <button id="graphEditToggle" class="graph-edit-btn">✏️ 编辑图谱</button>
+        </div>
+        <div id="graphSummary" class="graph-summary"></div>
+        <div id="graphEditPanel" class="graph-edit-panel hidden">
+          <div class="graph-edit-title">编辑模式：点击节点/边进行编辑，或手动新增</div>
+          <div class="graph-edit-row">
+            <input id="geNewName" placeholder="新节点名称" />
+            <select id="geNewType">
+              <option value="project">project</option><option value="file">file</option>
+              <option value="code">code</option><option value="paper">paper</option>
+              <option value="problem">problem</option><option value="solution">solution</option>
+              <option value="decision">decision</option><option value="experience">experience</option>
+            </select>
+            <button id="geAddNode">＋ 新增节点</button>
+          </div>
+          <div id="geNodeForm" class="graph-edit-form hidden">
+            <div class="graph-edit-title" id="geNodeTitle"></div>
+            <label>名称 <input id="geNodeName" /></label>
+            <label>摘要 <textarea id="geNodeSummary" rows="2"></textarea></label>
+            <div class="graph-edit-row">
+              <button id="geNodeSave">保存节点</button>
+              <button id="geNodeDel" class="danger-btn">删除节点</button>
+              <button id="geNodeCancel">取消</button>
+            </div>
+          </div>
+          <div id="geEdgeForm" class="graph-edit-form hidden">
+            <div class="graph-edit-title" id="geEdgeTitle"></div>
+            <label>关系 <input id="geEdgeRel" placeholder="如：用于/导致/替代" /></label>
+            <div class="graph-edit-row">
+              <button id="geEdgeSave">保存边</button>
+              <button id="geEdgeDel" class="danger-btn">删除边</button>
+              <button id="geEdgeCancel">取消</button>
+            </div>
+          </div>
+        </div>
+        <div class="graph-wrap"><canvas id="graphCanvas"></canvas></div>
+        <div id="graphDetail" class="graph-detail"></div>
+      </section>
+
+      <section id="view-maintenance" class="view">
+        <div class="view-head"><h2>记忆维护</h2><span class="view-hint">巩固流水线：降级不删除，回收站可恢复</span></div>
+        <div id="maintenanceContent" class="view-body"></div>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="view-head"><h2>设置</h2><span class="view-hint">采集目标 / 授权开关 / 免打扰 / 记忆管理</span></div>
+        <div id="settingsContent" class="view-body"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js?v=20260829"></script>
+</body>
+</html>
